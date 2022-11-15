@@ -1,43 +1,29 @@
-import java.io.*;
-import java.util.*;
+package com.talksane.chat.TalkSane.repository;
 
-public class UserRepositoryImpl {
-    BufferedReader br;
-    PrintWriter out;
+import com.talksane.chat.TalkSane.models.User;
+import com.talksane.chat.TalkSane.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 
-    private void solve() throws Exception {
-        
-    }
+import javax.transaction.Transactional;
+import java.util.List;
 
-    public static void main(String args[]) throws Exception {
-        new UserRepositoryImpl().init();
 
-    }
+@Transactional
+abstract public class UserRepositoryImpl implements UserRepository {
+    @Autowired
+    private UserRepository userRepository;
 
-    private void init() throws Exception {
-        if (System.getProperty("ONLINE_JUDGE") == null) {
-            File file = new File("./input.txt");
-            br = new BufferedReader(new FileReader(file));
-            out = new PrintWriter("./output.txt");
-        } else {
-            out = new PrintWriter(System.out);
-            br = new BufferedReader(new InputStreamReader(System.in));
+    @Override
+    public User findByUsername(String username) {
+        try {
+            User user = userRepository.getUserByUsername(username);
+            System.out.println(user);
+            return user;
         }
-        solve();
-        out.flush();
-    }
-
-    private int in() throws Exception {
-        return (Integer.parseInt(br.readLine()));
-    }
-
-    private int[] in(int n) throws Exception {
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] arr = new int[n];
-        for (int i = 0; i < n; i++)
-            arr[i] = Integer.parseInt(st.nextToken());
-        return (arr);
-
-
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 }
